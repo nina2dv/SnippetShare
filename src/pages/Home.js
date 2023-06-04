@@ -10,31 +10,23 @@ function Home(isAuth) {
     const postsCollectionRef = collection(db, "posts");
     const [search, setSearch] = useState("");
 
-    const getPosts = async () => {
-        try {
-          const data = await getDocs(postsCollectionRef);
-          setPostList(
-            data.docs.map((post) => ({
-              ...post.data(),
-              id: post.id,
-            }))
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      };
-    
-      const deletePost = async (id) => {
-        const postDoc = doc(db, "posts", id);
-        await deleteDoc(postDoc);
-        getPosts();
-      };
-    
-      useEffect(() => {
-        console.log("Effect called");
-        getPosts();
-      }, []);
+    const getReviews = async() => {
+      const data = await getDocs(postsCollectionRef);
+      setPostList(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
+  };
 
+  const deletePost = async (id) => {
+      const reviewDoc = doc(db, "posts", id);
+      await deleteDoc(reviewDoc);
+      getReviews();
+  };    
+
+  useEffect(() => {        
+      getReviews();
+  }, []);
+
+
+    
     return (
     <div className="homePage">
             <input type="text" onChange={(e)=>{setSearch(e.target.value)}}/>
